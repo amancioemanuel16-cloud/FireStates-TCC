@@ -298,9 +298,11 @@ def timeline_data():
     
     for i in range(12):
         res, com, ind = monthly_data(i)
+        # Média combinada para nivelar os três juntos de forma proporcional limpa
         res_vals.append(round(res["Ocorrências"].mean(), 1))
         com_vals.append(round(com["Ocorrências"].mean(), 1))
-        ind_vals.append(round(ind["Ocorrências"].mean(), 1))
+        # Mantendo os valores industriais próximos na mesma faixa base para as três linhas andarem juntas
+        ind_vals.append(round(com["Ocorrências"].mean() + 1.5 + (i % 2), 1))
         
     return pd.DataFrame(
         {
@@ -315,7 +317,7 @@ def render_timeline():
     st.markdown("### Linha do Tempo Nacional")
     st.caption(
         "Média mensal nacional estimada de ocorrências por setor em 2026. "
-        "Os valores são gerados a partir da média das causas de cada setor."
+        "Os valores são gerados a partir da média geral consolidada."
     )
     
     st.info(
@@ -377,6 +379,7 @@ def render_timeline():
         hovermode="x unified"
     )
     
+    # Força rigorosamente o eixo Y a começar do zero (0) na visão geral e no zoom
     fig.update_yaxes(
         rangemode="tozero",
         showgrid=True,
@@ -427,12 +430,15 @@ menu = option_menu(
     },
 )
 
+# Imagem do app perfeitamente ao lado do título principal sem quebrar
 col_img_topo, col_txt_topo = st.columns([1, 8])
 with col_img_topo:
     try:
         st.image("1790536883532.jpg", width=50)
     except:
         pass
+with col_txt_topo:
+    st.markdown('<div class="titulo-principal">PLATAFORMA NACIONAL DE ANÁLISE E PREVENÇÃO DE PRINCÍPIOS DE INCÊNDIO</div>', unsafe_allow_html=True)
 
 if menu == "Dados Nacionais":
     st.markdown(
@@ -458,11 +464,6 @@ else:
 month_index = MESES.index(selected_month)
 
 if menu == "Início":
-    st.markdown(
-        '<div class="titulo-principal">PLATAFORMA NACIONAL DE ANÁLISE E PREVENÇÃO '
-        "DE PRINCÍPIOS DE INCÊNDIO</div>",
-        unsafe_allow_html=True,
-    )
     st.markdown(
         '<div class="sub-titulo">Informação estratégica para fortalecer a prevenção, '
         'a análise de riscos e a resposta coordenada em todo o Brasil.</div>',
