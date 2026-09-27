@@ -470,12 +470,32 @@ if menu == "Início":
     )
     st.markdown(
         "O FIRESTATS.br é uma plataforma nacional de análise e prevenção de "
-        "princípios de incêndio. Sua finalidade é apoiar órgãos públicos, equipes "
-        "de emergência e comunidades na tomada de decisões de segurança com base "
-        "em informações organizadas por setor, estado e período."
+        "princípios de incêndio. Seus dados e registros são alimentados diretamente "
+        "pelo aplicativo móvel integrado ao hardware ESP32. Sua finalidade é apoiar "
+        "órgãos públicos, equipes de emergência e comunidades na tomada de decisões "
+        "de segurança com base em informações organizadas por setor, estado e período."
     )
 
     st.markdown("### Informações em destaque")
+    
+    temp = 32
+    if temp > 30:
+        st.warning(
+            "☀️ **Boletim de Risco Sazonal**\n\n"
+            f"Temperatura simulada: {temp} °C. O calor elevado aumenta o risco "
+            "de curto-circuito por sobrecarga de ar-condicionado nos setores "
+            "Residencial e Comercial. Reforce a inspeção preventiva."
+        )
+    else:
+        st.warning(
+            "☀️ **Boletim de Risco Sazonal**\n\n"
+            f"Temperatura simulada: {temp} °C. O tempo seco aumenta o perigo "
+            "de incêndios e superaquecimento de equipamentos na Indústria. "
+            "Reforce a inspeção preventiva."
+        )
+    st.caption(
+        "Leitura simulada preparada para futura integração com a API do OpenWeather."
+    )
 
     highlights = st.columns(3)
     with highlights[0]:
