@@ -74,12 +74,10 @@ st.markdown(
     """
     <style>
     .titulo-principal {
-        text-align: center;
         color: #1E293B;
-        font-size: 32px;
+        font-size: 26px;
         font-weight: bold;
-        margin-bottom: 5px;
-        margin-top: 18px;
+        margin-top: 5px;
     }
     .sub-titulo {
         text-align: center;
@@ -292,17 +290,12 @@ def render_state_charts(state, month_index, month_name):
 
 
 def timeline_data():
-    # Dados consolidados com picos reais batendo em até 78 para forçar a escala correta no eixo Y
-    res_vals = [42, 68, 55, 48, 62, 74, 50, 45, 58, 65, 52, 49]
-    com_vals = [38, 52, 65, 59, 47, 72, 53, 48, 61, 56, 68, 44]
-    ind_vals = [45, 59, 52, 67, 54, 78, 49, 57, 64, 51, 62, 53]
-        
     return pd.DataFrame(
         {
             "Mês": MESES_ABREVIADOS,
-            "Residencial": res_vals,
-            "Comercial": com_vals,
-            "Industrial": ind_vals,
+            "Residencial": [22, 28, 19, 31, 35, 42, 38, 30, 24, 20, 16, 25],
+            "Comercial": [20, 25, 17, 28, 32, 39, 34, 27, 22, 18, 14, 23],
+            "Industrial": [18, 22, 15, 25, 29, 36, 31, 24, 19, 15, 12, 20],
         }
     )
 
@@ -310,7 +303,7 @@ def render_timeline():
     st.markdown("### Linha do Tempo Nacional")
     st.caption(
         "Média mensal nacional estimada de ocorrências por setor em 2026. "
-        "Os valores são gerados a partir da média geral consolidada."
+        "Os valores são gerados a partir da média das causas de cada setor."
     )
     
     st.info(
@@ -372,14 +365,12 @@ def render_timeline():
         hovermode="x unified"
     )
     
-    # Eixo Y começando rigorosamente do zero (0) e expandindo dinamicamente nos picos
     fig.update_yaxes(
         rangemode="tozero",
         showgrid=True,
         zeroline=True,
         zerolinewidth=1,
-        zerolinecolor="#94A3B8",
-        autorange=True
+        zerolinecolor="#94A3B8"
     )
     
     st.plotly_chart(fig, use_container_width=True)
@@ -424,15 +415,15 @@ menu = option_menu(
     },
 )
 
-# Imagem do aplicativo alinhada perfeitamente ao lado do título principal via colunas nativas
-col_img_topo, col_txt_topo = st.columns([1, 8], gap="small")
-with col_img_topo:
+# Imagem do aplicativo alinhada perfeitamente ao lado do título principal
+col_img, col_titulo = st.columns([0.8, 9.2])
+with col_img:
     try:
         st.image("1790536883532.jpg", width=55)
     except:
         pass
-with col_txt_topo:
-    st.markdown('<div class="titulo-principal" style="margin-top: 0px;">FIRESTATS.br</div>', unsafe_allow_html=True)
+with col_titulo:
+    st.markdown('<div class="titulo-principal">PLATAFORMA NACIONAL DE ANÁLISE E PREVENÇÃO DE PRINCÍPIOS DE INCÊNDIO</div>', unsafe_allow_html=True)
 
 if menu == "Dados Nacionais":
     st.markdown(
@@ -473,7 +464,6 @@ if menu == "Início":
 
     st.markdown("### Informações em destaque")
     
-    # Boletim de Risco Sazonal original garantido na aba Início
     temp = 32
     if temp > 30:
         st.warning(
