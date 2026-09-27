@@ -295,9 +295,10 @@ def timeline_data():
     return pd.DataFrame(
         {
             "Mês": MESES_ABREVIADOS,
-            "Residencial": [18, 24, 12, 28, 42, 57, 45, 32, 22, 15, 9, 18], 
-            "Comercial": [10, 14, 8, 15, 22, 28, 25, 18, 14, 10, 6, 12],
-            "Industrial": [5, 8, 4, 7, 10, 14, 12, 9, 6, 4, 2, 6], 
+            # Escala bem encolhida e rasteira na base (espaço de um dedo) para dar o zoom dramático
+            "Residencial": [1.2, 1.8, 0.9, 2.1, 3.0, 4.2, 3.3, 2.4, 1.6, 1.1, 0.6, 1.3], 
+            "Comercial": [0.7, 1.0, 0.5, 1.1, 1.6, 2.1, 1.8, 1.3, 0.9, 0.7, 0.4, 0.8],
+            "Industrial": [0.3, 0.5, 0.2, 0.5, 0.8, 1.1, 0.9, 0.7, 0.4, 0.3, 0.1, 0.4], 
         }
     )
 
@@ -309,7 +310,7 @@ def render_timeline():
     )
     
     st.info(
-        "💡 **Dica interativa:** Dê dois cliques em um setor na legenda para dar zoom e visualizar os detalhes isolados. No celular, use o botão de expandir no canto do gráfico para ver em Tela Cheia."
+        "💡 **Dica interativa:** Dê dois cliques em um setor na legenda para dar zoom e visualizar os detalhes isolados."
     )
     
     timeline = timeline_data()
@@ -383,11 +384,12 @@ def render_timeline():
     )
 
 
+# Menu lateral limpo
 menu = option_menu(
-    menu_title="🔥 FIRESTATS.br",
+    menu_title="FIRESTATS.br",
     options=["Início", "Gráficos", "Dados Nacionais", "Linha do Tempo", "Contato"],
     icons=["house", "bar-chart-line", "globe2", "clock-history", "envelope"],
-    menu_icon="cast",
+    menu_icon="shield-fill-fire",
     default_index=0,
     orientation="horizontal",
     styles={
@@ -398,9 +400,9 @@ menu = option_menu(
         },
         "menu-title": {
             "color": "white",
-            "font-size": "20px",
+            "font-size": "18px",
             "font-weight": "bold",
-            "margin-right": "18px",
+            "margin-right": "12px",
         },
         "icon": {"color": "white", "font-size": "16px"},
         "nav-link": {
@@ -442,11 +444,22 @@ else:
 month_index = MESES.index(selected_month)
 
 if menu == "Início":
-    st.markdown(
-        '<div class="titulo-principal">PLATAFORMA NACIONAL DE ANÁLISE E PREVENÇÃO '
-        "DE PRINCÍPIOS DE INCÊNDIO</div>",
-        unsafe_allow_html=True,
-    )
+    # Tentativa de carregar o logo/imagem no topo se estiver na pasta do GitHub
+    try:
+        col_logo, col_tit = st.columns([1, 5])
+        with col_logo:
+            st.image("imagem_app.png", width=90)
+        with col_tit:
+            st.markdown(
+                '<div class="titulo-principal" style="text-align: left; margin-top: 0;">PLATAFORMA NACIONAL FIRESTATS.br</div>',
+                unsafe_allow_html=True,
+            )
+    except:
+        st.markdown(
+            '<div class="titulo-principal">PLATAFORMA NACIONAL DE ANÁLISE E PREVENÇÃO DE PRINCÍPIOS DE INCÊNDIO</div>',
+            unsafe_allow_html=True,
+        )
+
     st.markdown(
         '<div class="sub-titulo">Informação estratégica para fortalecer a prevenção, '
         'a análise de riscos e a resposta coordenada em todo o Brasil.</div>',
@@ -459,24 +472,6 @@ if menu == "Início":
         "em informações organizadas por setor, estado e período."
     )
     
-    st.markdown("---")
-    st.markdown("### 📱 Ecossistema Integrado")
-    col_img, col_txt = st.columns([1, 2])
-    
-    with col_img:
-        # Puxando a imagem direto do link que você mandou
-        st.image("https://share.gemini.google/wqmUys3oGf7q", use_container_width=True) 
-            
-    with col_txt:
-        st.markdown(
-            "#### Aplicativo Mobile FIRESTATS\n"
-            "O dashboard web atua em sincronia com nosso aplicativo mobile exclusivo. "
-            "Integrado ao microcontrolador **ESP32**, o app recebe alertas de sensores "
-            "em tempo real, registra as ocorrências no banco de dados (Firebase) e "
-            "aciona protocolos de emergência de forma automatizada."
-        )
-    st.markdown("---")
-
     st.markdown("### Informações em destaque")
     temp = 32
     if temp > 30:
