@@ -292,12 +292,23 @@ def render_state_charts(state, month_index, month_name):
 
 
 def timeline_data():
+    # Calculando dinamicamente a média das ocorrências de cada setor por mês
+    res_vals = []
+    com_vals = []
+    ind_vals = []
+    
+    for i in range(12):
+        res, com, ind = monthly_data(i)
+        res_vals.append(round(res["Ocorrências"].mean(), 1))
+        com_vals.append(round(com["Ocorrências"].mean(), 1))
+        ind_vals.append(round(ind["Ocorrências"].mean(), 1))
+        
     return pd.DataFrame(
         {
             "Mês": MESES_ABREVIADOS,
-            "Residencial": [2, 4, 1, 5, 8, 12, 9, 6, 3, 2, 1, 3], 
-            "Comercial": [1, 2, 1, 2, 4, 6, 5, 3, 2, 1, 1, 2],
-            "Industrial": [1, 1, 1, 1, 2, 3, 2, 1, 1, 1, 0, 1], 
+            "Residencial": res_vals,
+            "Comercial": com_vals,
+            "Industrial": ind_vals,
         }
     )
 
@@ -305,7 +316,7 @@ def render_timeline():
     st.markdown("### Linha do Tempo Nacional")
     st.caption(
         "Média mensal nacional estimada de ocorrências por setor em 2026. "
-        "Os valores são fictícios para demonstração."
+        "Os valores são gerados a partir da média das causas de cada setor."
     )
     
     st.info(
@@ -368,7 +379,6 @@ def render_timeline():
     )
     
     fig.update_yaxes(
-        range=[0, 15],       
         showgrid=True,
         zeroline=True,
         zerolinewidth=1,
@@ -382,7 +392,6 @@ def render_timeline():
     )
 
 
-# Menu com a imagem do app no título substituindo o emoji de fogo
 menu = option_menu(
     menu_title="FIRESTATS.br",
     options=["Início", "Gráficos", "Dados Nacionais", "Linha do Tempo", "Contato"],
@@ -418,7 +427,7 @@ menu = option_menu(
     },
 )
 
-# Exibindo a imagem do app logo no topo, ao lado do título do menu se possível, ou incorporada no cabeçalho
+# Exibindo a imagem do app no topo ao lado do título
 col_img_topo, col_txt_topo = st.columns([1, 8])
 with col_img_topo:
     try:
@@ -429,7 +438,7 @@ with col_img_topo:
 if menu == "Dados Nacionais":
     st.markdown(
         '<h1 style="text-align:center; color:#1e293b; font-size:42px; '
-        'margin:28px 0 18px;">BANCO DE ESTATÍSTICAS DE PRINCÍPIO DE INCÊNDIO</h1>',
+        'margin:28px 0 18px;">BANCO DE ESTATÍSTICAS DE PRINCÍPIOS DE INCÊNDIO</h1>',
         unsafe_allow_html=True,
     )
     selected_month = st.selectbox(
