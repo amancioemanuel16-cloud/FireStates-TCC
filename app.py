@@ -295,10 +295,9 @@ def timeline_data():
     return pd.DataFrame(
         {
             "Mês": MESES_ABREVIADOS,
-            # Escala bem encolhida e rasteira na base (espaço de um dedo) para dar o zoom dramático
-            "Residencial": [1.2, 1.8, 0.9, 2.1, 3.0, 4.2, 3.3, 2.4, 1.6, 1.1, 0.6, 1.3], 
-            "Comercial": [0.7, 1.0, 0.5, 1.1, 1.6, 2.1, 1.8, 1.3, 0.9, 0.7, 0.4, 0.8],
-            "Industrial": [0.3, 0.5, 0.2, 0.5, 0.8, 1.1, 0.9, 0.7, 0.4, 0.3, 0.1, 0.4], 
+            "Residencial": [2, 4, 1, 5, 8, 12, 9, 6, 3, 2, 1, 3], 
+            "Comercial": [1, 2, 1, 2, 4, 6, 5, 3, 2, 1, 1, 2],
+            "Industrial": [1, 1, 1, 1, 2, 3, 2, 1, 1, 1, 0, 1], 
         }
     )
 
@@ -369,8 +368,7 @@ def render_timeline():
     )
     
     fig.update_yaxes(
-        autorange=True,      
-        rangemode="tozero",  
+        range=[0, 15],       
         showgrid=True,
         zeroline=True,
         zerolinewidth=1,
@@ -384,12 +382,12 @@ def render_timeline():
     )
 
 
-# Menu lateral limpo
+# Menu com a imagem do app no título substituindo o emoji de fogo
 menu = option_menu(
     menu_title="FIRESTATS.br",
     options=["Início", "Gráficos", "Dados Nacionais", "Linha do Tempo", "Contato"],
     icons=["house", "bar-chart-line", "globe2", "clock-history", "envelope"],
-    menu_icon="shield-fill-fire",
+    menu_icon=None,
     default_index=0,
     orientation="horizontal",
     styles={
@@ -420,6 +418,14 @@ menu = option_menu(
     },
 )
 
+# Exibindo a imagem do app logo no topo, ao lado do título do menu se possível, ou incorporada no cabeçalho
+col_img_topo, col_txt_topo = st.columns([1, 8])
+with col_img_topo:
+    try:
+        st.image("1790536883532.jpg", width=50)
+    except:
+        pass
+
 if menu == "Dados Nacionais":
     st.markdown(
         '<h1 style="text-align:center; color:#1e293b; font-size:42px; '
@@ -444,22 +450,11 @@ else:
 month_index = MESES.index(selected_month)
 
 if menu == "Início":
-    # Tentativa de carregar o logo/imagem no topo se estiver na pasta do GitHub
-    try:
-        col_logo, col_tit = st.columns([1, 5])
-        with col_logo:
-            st.image("imagem_app.png", width=90)
-        with col_tit:
-            st.markdown(
-                '<div class="titulo-principal" style="text-align: left; margin-top: 0;">PLATAFORMA NACIONAL FIRESTATS.br</div>',
-                unsafe_allow_html=True,
-            )
-    except:
-        st.markdown(
-            '<div class="titulo-principal">PLATAFORMA NACIONAL DE ANÁLISE E PREVENÇÃO DE PRINCÍPIOS DE INCÊNDIO</div>',
-            unsafe_allow_html=True,
-        )
-
+    st.markdown(
+        '<div class="titulo-principal">PLATAFORMA NACIONAL DE ANÁLISE E PREVENÇÃO '
+        "DE PRINCÍPIOS DE INCÊNDIO</div>",
+        unsafe_allow_html=True,
+    )
     st.markdown(
         '<div class="sub-titulo">Informação estratégica para fortalecer a prevenção, '
         'a análise de riscos e a resposta coordenada em todo o Brasil.</div>',
@@ -467,11 +462,12 @@ if menu == "Início":
     )
     st.markdown(
         "O FIRESTATS.br é uma plataforma nacional de análise e prevenção de "
-        "princípios de incêndio. Sua finalidade é apoiar órgãos públicos, equipes "
-        "de emergência e comunidades na tomada de decisões de segurança com base "
-        "em informações organizadas por setor, estado e período."
+        "princípios de incêndio. Seus dados e registros são alimentados diretamente "
+        "pelo aplicativo móvel integrado ao hardware ESP32. Sua finalidade é apoiar "
+        "órgãos públicos, equipes de emergência e comunidades na tomada de decisões "
+        "de segurança com base em informações organizadas por setor, estado e período."
     )
-    
+
     st.markdown("### Informações em destaque")
     temp = 32
     if temp > 30:
