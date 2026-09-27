@@ -295,7 +295,6 @@ def timeline_data():
     return pd.DataFrame(
         {
             "Mês": MESES_ABREVIADOS,
-            # Criei a variação alta pra forçar as outras a ficarem "esmagadinhas" juntas embaixo
             "Residencial": [18, 24, 12, 28, 42, 57, 45, 32, 22, 15, 9, 18], 
             "Comercial": [10, 14, 8, 15, 22, 28, 25, 18, 14, 10, 6, 12],
             "Industrial": [5, 8, 4, 7, 10, 14, 12, 9, 6, 4, 2, 6], 
@@ -310,7 +309,7 @@ def render_timeline():
     )
     
     st.info(
-        "💡 **Dica interativa:** Dê dois cliques em um setor na legenda para dar zoom e visualizar os detalhes isolados."
+        "💡 **Dica interativa:** Dê dois cliques em um setor na legenda para dar zoom e visualizar os detalhes isolados. No celular, use o botão de expandir no canto do gráfico para ver em Tela Cheia."
     )
     
     timeline = timeline_data()
@@ -344,9 +343,9 @@ def render_timeline():
         
     fig.update_xaxes(
         tickangle=0,
-        showline=True,        # Isso cria o "chão" visual no eixo X
-        linewidth=1,          # Grossura da linha do chão
-        linecolor="#94A3B8"   # Cor do chão para o zero não parecer que tá flutuando
+        showline=True,        
+        linewidth=1,          
+        linecolor="#94A3B8"   
     )
     
     fig.update_layout(
@@ -460,6 +459,24 @@ if menu == "Início":
         "em informações organizadas por setor, estado e período."
     )
     
+    st.markdown("---")
+    st.markdown("### 📱 Ecossistema Integrado")
+    col_img, col_txt = st.columns([1, 2])
+    
+    with col_img:
+        # Puxando a imagem direto do link que você mandou
+        st.image("https://share.gemini.google/wqmUys3oGf7q", use_container_width=True) 
+            
+    with col_txt:
+        st.markdown(
+            "#### Aplicativo Mobile FIRESTATS\n"
+            "O dashboard web atua em sincronia com nosso aplicativo mobile exclusivo. "
+            "Integrado ao microcontrolador **ESP32**, o app recebe alertas de sensores "
+            "em tempo real, registra as ocorrências no banco de dados (Firebase) e "
+            "aciona protocolos de emergência de forma automatizada."
+        )
+    st.markdown("---")
+
     st.markdown("### Informações em destaque")
     temp = 32
     if temp > 30:
